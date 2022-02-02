@@ -29,11 +29,16 @@ public class Velocity {
         double xDistance = x2 - x1;
         double yDistance = y2 - y1;
 
+        // If velocity exceeds maximum, set to maximum
         if (xDistance > MAX_VELOCITY) {
             xDistance = MAX_VELOCITY;
+        } else if (xDistance < -MAX_VELOCITY) {
+            xDistance = -MAX_VELOCITY;
         }
         if (yDistance > MAX_VELOCITY) {
             yDistance = MAX_VELOCITY;
+        } else if (yDistance < -MAX_VELOCITY) {
+            yDistance = -MAX_VELOCITY;
         }
 
         return new Velocity(xDistance, yDistance);
@@ -72,7 +77,7 @@ public class Velocity {
      * @param y2 Y coordinate of the second point
      * @return Velocity between the two points
      */
-    public static double getDirectionalVelocity(double x1, double y1, double x2, double y2){
+    public static double getDirectionalVelocity(double x1, double y1, double x2, double y2) {
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 
@@ -86,19 +91,26 @@ public class Velocity {
     }
 
     /**
-     * Get direction of current velocity in radians
+     * Get direction of current velocity in radians based on typical unit circle
+     *      pi/2
+     *       I
+     * pi ---O--- 0
+     *       I
+     *     3pi/2
      * 
      * @return Direction of current velocity in radians
      */
-    public double getVelocityAngle(){
-        if (xVelocity < 0){
-            return -Math.atan(yVelocity / xVelocity) - ((3 * Math.PI) / 4);
+    public double getVelocityAngle() {
+        if (xVelocity < 0 && yVelocity < 0) {
+            return Math.atan(yVelocity / xVelocity) + Math.PI;
+        } else if (xVelocity < 0) {
+            return Math.atan(yVelocity / xVelocity) + Math.PI;
+        } else if (yVelocity < 0) {
+            return Math.atan(yVelocity / xVelocity) + (2 * Math.PI);
+        } else if (xVelocity == 0 && yVelocity == 0) {
+            return 0;
         }
-        if (yVelocity < 0) {
-            return -Math.atan(yVelocity / xVelocity) - ((3 * Math.PI) / 4); // TODO: https://cdn.imgbin.com/25/19/22/imgbin-degree-right-angle-radian-unit-circle-radian-line-2WmmJpR5yWeuNwMQtsuHUiVGh.jpg
-            // TODO: GIT
-        }
-        return -Math.atan(yVelocity / xVelocity);
+        return Math.atan(yVelocity / xVelocity);
     }
 
     @Override
@@ -107,7 +119,8 @@ public class Velocity {
     }
 
     public static void main(String[] args) {
-        Velocity test = Velocity.calcVelocity(0, 0, 0 , 1);
+        Velocity test = Velocity.calcVelocity(0, 0, 3, 1);
+        System.out.println(test.getDirectionalVelocity());
         System.out.println(Math.toDegrees(test.getVelocityAngle()));
     }
 }
