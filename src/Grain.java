@@ -20,7 +20,7 @@ public class Grain extends JComponent {
 
     public Grain(Point p) {
         this.xCoord = p.x;
-        this.yCoord = p.x;
+        this.yCoord = p.y;
     }
 
     public Color getColor() {
