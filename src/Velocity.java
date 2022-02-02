@@ -119,7 +119,7 @@ public class Velocity {
     }
 
     public static void main(String[] args) {
-        Velocity test = Velocity.calcVelocity(0, 0, 3, 1);
+        Velocity test = Velocity.calcVelocity(0, 0, 1, -1);
         System.out.println(test.getDirectionalVelocity());
         System.out.println(Math.toDegrees(test.getVelocityAngle()));
     }
