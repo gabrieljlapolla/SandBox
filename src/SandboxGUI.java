@@ -54,7 +54,7 @@ class SandboxGUI extends JFrame implements ComponentListener {
         });
         ActionListener update = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Sandbox.updateGrains(panel, getHeight());
+                Sandbox.updateGrains(panel);
             }
         };
         Timer timer = new Timer(DELAY, update);

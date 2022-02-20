@@ -4,16 +4,16 @@
 
 public class Velocity {
     private static final int MAX_VELOCITY = 10; // Calculated velocities cannot exceed this amount from 0
-    public double xVelocity = 0;
-    public double yVelocity = 0;
+    public double x = 0; // X component of velocity
+    public double y = 0; // Y component of velocity
 
     Velocity() {
 
     }
 
-    Velocity(double xVelocity, double yVelocity) {
-        this.xVelocity = xVelocity;
-        this.yVelocity = yVelocity;
+    Velocity(double x, double y) {
+        this.x = x;
+        this.y = y;
     }
 
     /**
@@ -87,7 +87,7 @@ public class Velocity {
      * @return Magnitude of the velocity of the current object
      */
     public double getDirectionalVelocity() {
-        return Math.sqrt(Math.pow(xVelocity, 2) + Math.pow(yVelocity, 2));
+        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     }
 
     /**
@@ -101,26 +101,20 @@ public class Velocity {
      * @return Direction of current velocity in radians
      */
     public double getVelocityAngle() {
-        if (xVelocity < 0 && yVelocity < 0) {
-            return Math.atan(yVelocity / xVelocity) + Math.PI;
-        } else if (xVelocity < 0) {
-            return Math.atan(yVelocity / xVelocity) + Math.PI;
-        } else if (yVelocity < 0) {
-            return Math.atan(yVelocity / xVelocity) + (2 * Math.PI);
-        } else if (xVelocity == 0 && yVelocity == 0) {
+        if (x < 0 && y < 0) {
+            return Math.atan(y / x) + Math.PI;
+        } else if (x < 0) {
+            return Math.atan(y / x) + Math.PI;
+        } else if (y < 0) {
+            return Math.atan(y / x) + (2 * Math.PI);
+        } else if (x == 0 && y == 0) {
             return 0;
         }
-        return Math.atan(yVelocity / xVelocity);
+        return Math.atan(y / x);
     }
 
     @Override
     public String toString() {
-        return String.format("X-Velocity: %f Y-Velocity: %f", xVelocity, yVelocity);
-    }
-
-    public static void main(String[] args) {
-        Velocity test = Velocity.calcVelocity(0, 0, 1, -1);
-        System.out.println(test.getDirectionalVelocity());
-        System.out.println(Math.toDegrees(test.getVelocityAngle()));
+        return String.format("X-Velocity: %f Y-Velocity: %f", x, y);
     }
 }

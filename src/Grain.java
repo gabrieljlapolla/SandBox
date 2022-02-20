@@ -8,35 +8,36 @@ import javax.swing.JComponent;
 public class Grain extends JComponent {
     private final Color COLOR;
     private final int SIZE;
-    public double xCoord;
-    public double yCoord;
     public Velocity velocity;
-    
 
-    public Grain(double xCoord, double yCoord) {
+    public Grain(double x, double y) {
         this.COLOR = randColor();
         this.SIZE = randSize();
-        this.xCoord = xCoord - (this.SIZE / 2);
-        this.yCoord = yCoord - (this.SIZE / 2);
+        setBounds((int) x - (this.SIZE / 2), (int) y - (this.SIZE / 2), this.SIZE, this.SIZE);
+        this.velocity = new Velocity(0, 0);
     }
 
     public Grain(Point p) {
         this.COLOR = randColor();
         this.SIZE = randSize();
-        this.xCoord = p.x - (this.SIZE / 2);
-        this.yCoord = p.y - (this.SIZE / 2);
+        setBounds((int) p.x - (this.SIZE / 2), (int) p.y - (this.SIZE / 2), this.SIZE, this.SIZE);
+        this.velocity = new Velocity(0, 0);
     }
 
     public Color getColor() {
         return this.COLOR;
     }
 
-    public int getSIZE(){
+    public int getSIZE() {
         return SIZE;
     }
 
-    public Point getPoint(){
-        return new Point((int) xCoord, (int) yCoord);
+    /**
+     * 
+     * @return
+     */
+    public void moveGrain() {
+        setBounds(getX() + (int) velocity.x, getY() + (int) velocity.y, SIZE, SIZE);
     }
 
     /**
@@ -72,8 +73,7 @@ public class Grain extends JComponent {
      */
     public static int randSize() {
         Random random = new Random(); // Each grain is a random size
-        //return random.nextInt(7) + 3;
-        return 25;
+        return random.nextInt(7) + 20;
     }
 
     protected void paintComponent(Graphics g) {
@@ -81,14 +81,14 @@ public class Grain extends JComponent {
         g.fillOval(0, 0, SIZE, SIZE);
         super.paintComponent(g);
     }
-    
+
     protected void paintBorder(Graphics g) {
         g.setColor(COLOR);
-        g.drawOval(0,0, getSize().width - 1, getSize().height - 1);
+        g.drawOval(0, 0, getSize().width - 1, getSize().height - 1);
     }
 
     @Override
     public String toString() {
-        return String.format("X: %d Y: %d Size: %d", xCoord, yCoord, SIZE);
+        return String.format("X: %d Y: %d Size: %d", getX(), getY(), SIZE);
     }
 }

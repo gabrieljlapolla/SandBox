@@ -44,7 +44,7 @@ public final class CollisionCheck {
      */
     public static JComponent collisionInArray(JComponent c1, JComponent[] array) {
         for (JComponent c2 : array) {
-            if (isColliding(c1, c2)) {
+            if (c1 != c2 && isColliding(c1, c2)) {
                 return c2;
             }
         }
