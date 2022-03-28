@@ -9,7 +9,7 @@ import javax.swing.JComponent;
 public final class Collisions {
 
     /**
-     * Checks if teh given point is within the bounds of the given JComponent
+     * Checks if the given point is within the bounds of the given JComponent
      * 
      * @param p Point to check
      * @param j JComponent to check

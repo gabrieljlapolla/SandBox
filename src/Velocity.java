@@ -3,9 +3,10 @@
  */
 
 public class Velocity {
-    private static final int MAX_VELOCITY = 10; // Calculated velocities cannot exceed this amount from 0
-    public double x = 0; // X component of velocity
-    public double y = 0; // Y component of velocity
+    private static final double MAX_VELOCITY = 10.0; // Calculated velocities cannot exceed this amount from 0
+    private static final double MIN_VELOCITY = 0.5; // Minimum absolute velocity
+    private double x = 0; // X component of velocity
+    private double y = 0; // Y component of velocity
 
     Velocity() {
 
@@ -14,6 +15,43 @@ public class Velocity {
     Velocity(double x, double y) {
         this.x = x;
         this.y = y;
+    }
+
+    public void setX(double x) {
+        this.x = checkMinMax(x);
+    }
+
+    public void setY(double y) {
+        this.y = checkMinMax(y);
+    }
+
+    public double getX() {
+        return this.x;
+    }
+
+    public double getY() {
+        return this.y;
+    }
+
+    /**
+     * Checks if the given velocity is not within min and max velocity bounds
+     * 
+     * @param velocity Velocity to be checked
+     * @return A corrected value if needed or original value
+     */
+    private double checkMinMax(double velocity) {
+        // If velocity exceeds maximum, set to maximum
+        if (velocity > MAX_VELOCITY) {
+            return MAX_VELOCITY;
+        }
+        if (velocity < -MAX_VELOCITY) {
+            return -MAX_VELOCITY;
+        }
+        if (Math.abs(velocity) <= MIN_VELOCITY) {
+            //System.out.println(velocity);
+            return 0;
+        }
+        return velocity;
     }
 
     /**
@@ -25,23 +63,12 @@ public class Velocity {
      * @param y2 Y coordinate of the second point
      * @return Velocity between the two points over 1 time unit
      */
-    public static Velocity calcVelocity(double x1, double y1, double x2, double y2) {
-        double xDistance = x2 - x1;
-        double yDistance = y2 - y1;
+    public void calcVelocity(double x1, double y1, double x2, double y2) {
+        x = x2 - x1;
+        y = y2 - y1;
 
-        // If velocity exceeds maximum, set to maximum
-        if (xDistance > MAX_VELOCITY) {
-            xDistance = MAX_VELOCITY;
-        } else if (xDistance < -MAX_VELOCITY) {
-            xDistance = -MAX_VELOCITY;
-        }
-        if (yDistance > MAX_VELOCITY) {
-            yDistance = MAX_VELOCITY;
-        } else if (yDistance < -MAX_VELOCITY) {
-            yDistance = -MAX_VELOCITY;
-        }
-
-        return new Velocity(xDistance, yDistance);
+        x = checkMinMax(x);
+        y = checkMinMax(y);
     }
 
     /**
@@ -54,18 +81,21 @@ public class Velocity {
      * @param y2 Y coordinate of the second point
      * @return Velocity between the two points over a given amount of time
      */
-    public static Velocity calcVelocity(double x1, double y1, double x2, double y2, double time) {
-        double xDistance = (x2 - x1) / time;
-        double yDistance = (y2 - y1) / time;
+    public void calcVelocity(double x1, double y1, double x2, double y2, double time) {
+        x = (x2 - x1) / time;
+        y = (y2 - y1) / time;
 
-        if (xDistance > MAX_VELOCITY) {
-            xDistance = MAX_VELOCITY;
+        // If velocity exceeds maximum, set to maximum
+        if (x > MAX_VELOCITY) {
+            x = MAX_VELOCITY;
+        } else if (x < -MAX_VELOCITY) {
+            x = -MAX_VELOCITY;
         }
-        if (yDistance > MAX_VELOCITY) {
-            yDistance = MAX_VELOCITY;
+        if (y > MAX_VELOCITY) {
+            y = MAX_VELOCITY;
+        } else if (y < -MAX_VELOCITY) {
+            y = -MAX_VELOCITY;
         }
-
-        return new Velocity(xDistance, yDistance);
     }
 
     /**
@@ -92,11 +122,11 @@ public class Velocity {
 
     /**
      * Get direction of current velocity in radians based on typical unit circle
-     *      pi/2
-     *       I
+     * pi/2
+     * I
      * pi ---O--- 0
-     *       I
-     *     3pi/2
+     * I
+     * 3pi/2
      * 
      * @return Direction of current velocity in radians
      */

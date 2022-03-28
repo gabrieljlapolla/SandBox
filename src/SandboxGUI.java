@@ -17,7 +17,8 @@ class SandboxGUI extends JFrame implements ComponentListener {
     private JPanel panel;
     private final int DELAY = 20;
 
-    private Point cursor;
+    public static Point cursor;
+    public static Velocity cursorVelocity;
     private Point prevCursor;
 
     /**
@@ -36,20 +37,29 @@ class SandboxGUI extends JFrame implements ComponentListener {
         panel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                cursor = e.getPoint();
-                Sandbox.addGrain(cursor, panel);
+                // Add grain on mouse right click
+                if (e.getButton() == MouseEvent.BUTTON3) {
+                    Sandbox.addGrain(e.getPoint(), panel);
+                }
             }
         });
         // Add grains when cursor is dragged
         panel.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (cursor != prevCursor) {
+                if ((cursor != prevCursor)) {
                     prevCursor = cursor;
                     cursor = e.getPoint();
                     Sandbox.addGrain(cursor, panel);
                 }
+            }
 
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                prevCursor = cursor;
+                cursor = e.getPoint();
+                cursorVelocity.calcVelocity(cursor.x, cursor.y, prevCursor.x, prevCursor.y);
+                // TODO: cursor velocity to move grains when clicked
             }
         });
         ActionListener update = new ActionListener() {
@@ -71,6 +81,9 @@ class SandboxGUI extends JFrame implements ComponentListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         addComponentListener(this);
+
+        cursorVelocity = new Velocity(0, 0);
+        cursor = new Point(0, 0);
 
         panel = new JPanel();
         panel.setBounds(0, 0, getWidth(), getHeight());

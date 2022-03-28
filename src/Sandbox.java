@@ -12,12 +12,15 @@ public final class Sandbox {
      * Adds a grain of sand to the frame at (x, y) and puts it in the grains list
      * 
      * @param coords Coordinates of grain
-     * @param panel Window
+     * @param panel  Window
      */
     public static void addGrain(Point coords, JPanel panel) {
         Grain grain = new Grain(coords);
-        grains.add(grain);
-        panel.add(grain);
+        // Check if grain exists on top of point to add new grain
+        if (Collisions.collisionInArray(grain, grains.toArray(new Grain[grains.size()])) == null) {
+            grains.add(grain);
+            panel.add(grain);
+        }
     }
 
     /**
@@ -27,21 +30,19 @@ public final class Sandbox {
      * @param panel Window
      */
     public static void updateGrains(JPanel panel) {
+        int windowHeight = panel.getHeight() - 40; // Y value to check if grain has hit bottom of window
+        int windowWidth = panel.getWidth();
+
         for (Grain grain : grains) {
-            // Check if grain is at bottom of window
-            // the -40 is used to compensate for the bar at top of the window
-            if (grain.getY() < panel.getHeight() - grain.getSIZE() - 40) {
-                grain.velocity.y += 0.1; // Gravity
-            } else {
-                // Check if grain will go through bottom
-                // Reduce and reverse grain velocity to make grain bounce
-                grain.velocity.y = -grain.velocity.y / 2 > 0 ? 0 : -grain.velocity.y / 2;
-            }
-            grain.moveGrain(); // Update grain location based on velocity
+            grain.moveGrain(windowWidth, windowHeight); // Update grain location based on velocity
+
             // TODO: Check if grain is colliding with another
-            JComponent colliding = CollisionCheck.collisionInArray(grain, grains.toArray(new Grain[grains.size()]));
+            JComponent colliding = Collisions.collisionInArray(grain, grains.toArray(new Grain[grains.size()]));
             if (colliding != null) {
-                
+                // Force = mass (SIZE) * acceleration
+                // Mass in this case is based on sphere size
+                // Every reaction has an equal and opposite reaction
+                System.out.println("Colliding");
             }
         }
         panel.repaint();
