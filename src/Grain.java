@@ -8,7 +8,7 @@ import javax.swing.JComponent;
 public class Grain extends JComponent {
     private final Color COLOR;
     private final int SIZE;
-    private final double BOUNCE_FACTOR = 0.75; // Amount of velocity kept when impacting something (e.g. 0.75 = 75% velocity retained)
+    private final double BOUNCE_FACTOR = 0.25; // Amount of velocity kept when impacting something (e.g. 0.75 = 75% velocity retained)
     final double GRAVITY = 1.0; // Represents y velocity to add to represent gravity
     public Velocity velocity;
     // TODO: add different elasticities so each bounces different??
