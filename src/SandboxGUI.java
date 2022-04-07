@@ -19,14 +19,25 @@ class SandboxGUI extends JFrame implements ComponentListener {
 
     public static Point cursor;
     public static Velocity cursorVelocity;
-    private Point prevCursor;
+    private static Point prevCursor;
+
+    private static SandboxGUI sandbox = new SandboxGUI();
 
     /**
      * Create the GUI window
      */
-    public SandboxGUI() {
+    private SandboxGUI() {
         initialize();
         createEvents();
+    }
+
+    /**
+     * SandboxGUI follows the singleton pattern
+     * 
+     * @return The single SandboxGUI instance
+     */
+    public static SandboxGUI getInstance() {
+        return sandbox;
     }
 
     /**
@@ -89,7 +100,6 @@ class SandboxGUI extends JFrame implements ComponentListener {
         panel.setBounds(0, 0, getWidth(), getHeight());
         panel.setBackground(new Color(30, 60, 220));
         add(panel);
-
     }
 
     public void componentResized(ComponentEvent e) {
@@ -103,10 +113,5 @@ class SandboxGUI extends JFrame implements ComponentListener {
     }
 
     public void componentMoved(ComponentEvent e) {
-    }
-
-    public static void main(String[] args) {
-        SandboxGUI gui = new SandboxGUI();
-        gui.setVisible(true);
     }
 }

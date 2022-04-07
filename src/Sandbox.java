@@ -1,7 +1,6 @@
 import java.awt.Point;
 import java.util.ArrayList;
 
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 public final class Sandbox {
@@ -32,19 +31,35 @@ public final class Sandbox {
     public static void updateGrains(JPanel panel) {
         int windowHeight = panel.getHeight() - 40; // Y value to check if grain has hit bottom of window
         int windowWidth = panel.getWidth();
-
         for (Grain grain : grains) {
             grain.moveGrain(windowWidth, windowHeight); // Update grain location based on velocity
 
             // TODO: Check if grain is colliding with another
-            JComponent colliding = Collisions.collisionInArray(grain, grains.toArray(new Grain[grains.size()]));
+            Grain colliding = (Grain) Collisions.collisionInArray(grain, grains.toArray(new Grain[grains.size()]));
             if (colliding != null) {
                 // Force = mass (SIZE) * acceleration
                 // Mass in this case is based on sphere size
                 // Every reaction has an equal and opposite reaction
-                System.out.println("Colliding");
+                //System.out.println("Colliding");
+                double velocityAngle1 = grain.velocity.getVelocityAngle();
+                double directionalVelocity1 = grain.velocity.getDirectionalVelocity();
+                double velocityAngle2 = colliding.velocity.getVelocityAngle();
+                double directionalVelocity2 = colliding.velocity.getDirectionalVelocity();
+
+                double xForce1 = grain.getSIZE() * grain.velocity.getX();
+                double yForce1 = grain.getSIZE() * grain.velocity.getY();
+                double xForce2 = colliding.getSIZE() * colliding.velocity.getX();
+                double yForce2 = colliding.getSIZE() * colliding.velocity.getY();
+
+                
             }
         }
         panel.repaint();
+    }
+
+    
+    public static void main(String[] args) {
+        SandboxGUI gui = SandboxGUI.getInstance();
+        gui.setVisible(true);
     }
 }
