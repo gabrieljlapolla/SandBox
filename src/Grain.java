@@ -8,7 +8,8 @@ import javax.swing.JComponent;
 public class Grain extends JComponent {
     private final Color COLOR;
     private final int SIZE;
-    private final double BOUNCE_FACTOR = 0.25; // Amount of velocity kept when impacting something (e.g. 0.75 = 75% velocity retained)
+    private final double BOUNCE_FACTOR = 0.25; // Amount of velocity kept when impacting something (e.g. 0.75 = 75%
+                                               // velocity retained)
     final double GRAVITY = 1.0; // Represents y velocity to add to represent gravity
     public Velocity velocity;
     // TODO: add different elasticities so each bounces different??
@@ -35,22 +36,38 @@ public class Grain extends JComponent {
         return SIZE;
     }
 
+    public Velocity getVelocity() {
+        return this.velocity;
+    }
+
+    public void setVelocity(Velocity velocity) {
+        this.velocity = velocity;
+    }
+
     /**
      * Move grain based on its velocity
      * Check if grain is going to go out of bounds and corrects if needed
      * 
-     * @param windowWidth Width of window
+     * @param windowWidth  Width of window
      * @param windowHeight Height of window
      */
     public void moveGrain(int windowWidth, int windowHeight) {
         int x = getX() + (int) velocity.getX();
         int y = getY() + (int) velocity.getY();
-        if (x >= windowWidth - SIZE) {
-            x = windowWidth - SIZE;
+        // The 16 below is to compensate for window borders 
+        // so the grain looks like it's actually bouncing off the side
+        if (x >= windowWidth - SIZE - 16) { // Hits right side
+            x = windowWidth - SIZE - 16;
+            velocity.setX(-velocity.getX() * BOUNCE_FACTOR);
+        } else if (x <= 0) { // Hits left side
+            x = 0;
             velocity.setX(-velocity.getX() * BOUNCE_FACTOR);
         }
-        if (y >= windowHeight - SIZE){
+        if (y >= windowHeight - SIZE) { // Hits bottom
             y = windowHeight - SIZE;
+            velocity.setY(-velocity.getY() * BOUNCE_FACTOR);
+        } else if (y < 0) { // Hits top
+            y = 0;
             velocity.setY(-velocity.getY() * BOUNCE_FACTOR);
         } else {
             velocity.setY(velocity.getY() + GRAVITY);
