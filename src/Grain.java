@@ -8,20 +8,19 @@ import javax.swing.JComponent;
 public class Grain extends JComponent {
     private final Color COLOR;
     private final int SIZE;
-    private final double BOUNCE_FACTOR; // Amount of velocity kept when impacting something (e.g. 0.75 = 75%
-                                               // velocity retained)
-    final double GRAVITY; // Represents y velocity to add to represent gravity
+    private final double BOUNCE_FACTOR; // Amount of velocity kept when impacting something (e.g. 0.75 = 75%)
+    private final double GRAVITY; // Represents y velocity to add to represent gravity
+    private final double FRICTION; // Velocity lost when rolling on floor
     public Velocity velocity;
-    // TODO: add different elasticities so each bounces different??
 
     public Grain(double x, double y) {
         this.COLOR = randColor();
-        this.SIZE = randSize();
+        this.velocity = new Velocity(randomValue(-3, 3), randomValue(-3, 3));
+        this.SIZE = (int) randomValue(1, 10);
+        this.GRAVITY = randomValue(0.75, 1.25);
+        this.BOUNCE_FACTOR = randomValue(0.1, 0.5);
+        this.FRICTION = randomValue(0.7, 0.9);
         setBounds((int) x - (this.SIZE / 2), (int) y - (this.SIZE / 2), this.SIZE, this.SIZE);
-        this.velocity = new Velocity(0, 0);
-        GRAVITY = randGravity();
-        BOUNCE_FACTOR = randBounce();
-        System.out.println(BOUNCE_FACTOR);
     }
 
     public Grain(Point p) {
@@ -54,8 +53,11 @@ public class Grain extends JComponent {
     public void moveGrain(int windowWidth, int windowHeight) {
         int x = getX() + (int) velocity.getX();
         int y = getY() + (int) velocity.getY();
+        if (y == windowHeight - SIZE) {
+            velocity.setX(velocity.getX() * FRICTION);
+        }
         // TODO: friction
-        // The 16 below is to compensate for window borders 
+        // The 16 below is to compensate for window borders
         // so the grain looks like it's actually bouncing off the side
         if (x >= windowWidth - SIZE - 16) { // Hits right side
             x = windowWidth - SIZE - 16;
@@ -103,25 +105,12 @@ public class Grain extends JComponent {
     }
 
     /**
-     * Returns a random size for a grain
-     * 
-     * @return Size of grain as an int
+     * Returns a random value between numbers given
+     * @param min Minimum returned value
+     * @param max Maximum returned value
+     * @return Random number within given bounds
      */
-    public static int randSize() {
-        Random random = new Random(); 
-        // Each grain is a random size from 1 - 10
-        return random.nextInt(10) + 1;
-    }
-    
-    private double randGravity() {
-        double max = 1.25;
-        double min = 0.75;
-        return Math.random() * (max - min + 1) + min;
-    }
-
-    private double randBounce() {
-        double min = 0.1;
-        double max = 0.5;
+    private double randomValue(double min, double max) {
         return min + (max - min) * Math.random();
     }
 
