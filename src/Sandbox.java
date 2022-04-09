@@ -31,16 +31,22 @@ public final class Sandbox {
     public static void updateGrains(JPanel panel) {
         int windowHeight = panel.getHeight() - 40; // Y value to check if grain has hit bottom of window
         int windowWidth = panel.getWidth();
+        Point cursor = SandboxGUI.cursor;
         for (Grain grain : grains) {
             grain.moveGrain(windowWidth, windowHeight); // Update grain location based on velocity
 
+            // Check if cursor is hitting grain
+            if (grain.getX() <= cursor.x && grain.getX() + grain.getSIZE() >= cursor.x
+                    && grain.getY() <= cursor.y && grain.getY() + grain.getSIZE() >= cursor.y) {
+                grain.setVelocity(Velocity.addVelocities(grain.getVelocity(), SandboxGUI.cursorVelocity));
+            }
+            
             // TODO: Check if grain is colliding with another
             Grain colliding = (Grain) Collisions.collisionInArray(grain, grains.toArray(new Grain[grains.size()]));
             if (colliding != null) {
                 // Force = mass (SIZE) * acceleration
                 // Mass in this case is based on sphere size
                 // Every reaction has an equal and opposite reaction
-                //System.out.println("Colliding");
                 double velocityAngle1 = grain.velocity.getVelocityAngle();
                 double directionalVelocity1 = grain.velocity.getDirectionalVelocity();
                 double velocityAngle2 = colliding.velocity.getVelocityAngle();
@@ -51,13 +57,11 @@ public final class Sandbox {
                 double xForce2 = colliding.getSIZE() * colliding.velocity.getX();
                 double yForce2 = colliding.getSIZE() * colliding.velocity.getY();
 
-                
             }
         }
         panel.repaint();
     }
 
-    
     public static void main(String[] args) {
         SandboxGUI gui = SandboxGUI.getInstance();
         gui.setVisible(true);
