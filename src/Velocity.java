@@ -48,7 +48,6 @@ public class Velocity {
             return -MAX_VELOCITY;
         }
         if (Math.abs(velocity) <= MIN_VELOCITY) {
-            //System.out.println(velocity);
             return 0;
         }
         return velocity;
@@ -64,11 +63,8 @@ public class Velocity {
      * @return Velocity between the two points over 1 time unit
      */
     public void calcVelocity(double x1, double y1, double x2, double y2) {
-        x = x2 - x1;
-        y = y2 - y1;
-
-        x = checkMinMax(x);
-        y = checkMinMax(y);
+        x = checkMinMax(x2 - x1);
+        y = checkMinMax(y2 - y1);
     }
 
     /**
@@ -141,6 +137,16 @@ public class Velocity {
             return 0;
         }
         return Math.atan(y / x);
+    }
+
+    /**
+     * Adds velocity v1 to velocity v2 and returns the sum
+     * @param v1 Velocity 1
+     * @param v2 Velocity 2
+     * @return The sum of the two given velocities
+     */
+    public static Velocity addVelocities(Velocity v1, Velocity v2) {
+        return new Velocity(v1.getX() + v2.getX(), v1.getY() + v2.getY());
     }
 
     @Override
