@@ -32,15 +32,21 @@ public final class Sandbox {
         int windowHeight = panel.getHeight() - 40; // Y value to check if grain has hit bottom of window
         int windowWidth = panel.getWidth();
         Point cursor = SandboxGUI.cursor;
+        int cursorRadius = 25; // Radius in which cursor will effect grains
+        int cursorStrength = 10; // How much the cursor pushes grains away
         for (Grain grain : grains) {
             grain.moveGrain(windowWidth, windowHeight); // Update grain location based on velocity
 
-            // Check if cursor is hitting grain
-            if (grain.getX() <= cursor.x && grain.getX() + grain.getSIZE() >= cursor.x
-                    && grain.getY() <= cursor.y && grain.getY() + grain.getSIZE() >= cursor.y) {
-                grain.setVelocity(Velocity.addVelocities(grain.getVelocity(), SandboxGUI.cursorVelocity));
+            // Check if cursor is near grain
+            if (grain.getX() <= cursor.x + cursorRadius 
+                    && grain.getX() + grain.getSIZE() >= cursor.x - cursorRadius
+                    && grain.getY() <= cursor.y + cursorRadius
+                    && grain.getY() + grain.getSIZE() >= cursor.y - cursorRadius) {
+                grain.setVelocity(
+                        new Velocity(SandboxGUI.cursorVelocity.getX() * cursorStrength - grain.getSIZE(),
+                                SandboxGUI.cursorVelocity.getY() * cursorStrength - grain.getSIZE()));
             }
-            
+
             // TODO: Check if grain is colliding with another
             Grain colliding = (Grain) Collisions.collisionInArray(grain, grains.toArray(new Grain[grains.size()]));
             if (colliding != null) {

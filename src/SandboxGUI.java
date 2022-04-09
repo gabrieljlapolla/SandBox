@@ -69,7 +69,7 @@ class SandboxGUI extends JFrame implements ComponentListener {
             public void mouseMoved(MouseEvent e) {
                 prevCursor = cursor;
                 cursor = e.getPoint();
-                cursorVelocity.calcVelocity(cursor.x, cursor.y, prevCursor.x, prevCursor.y);
+                cursorVelocity.calcVelocity(prevCursor.x, prevCursor.y, cursor.x, cursor.y);
                 // TODO: cursor velocity to move grains when clicked
             }
         });
